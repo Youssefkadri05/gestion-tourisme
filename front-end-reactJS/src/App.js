@@ -7,6 +7,7 @@ import HomeUtilisateur from './utilisateur/HomeUtilisateur';
 import HomeAdmin from './admin/HomeAdmin';
 import DeconnexionApp from './deconnexion/DeconnexionApp';
 import CompteList from './compte/CompteListe';
+import ModifierCompte from './compte/ModifierCompte';
 import jwt_decode from 'jwt-decode';
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
         <Route path="/homeutilisateur" element={<HomeUtilisateur />} />
         <Route path="/admin" element={<HomeAdmin />} />
         <Route path="/comptes" element={<CompteList />} />
+        <Route path="/modifier-compte/:id" element={<ModifierCompte />} />
         <Route path="/connexion" element={<ConnexionApp setLoggedIn={setLoggedIn} setIsAdmin={setIsAdmin} />} />
         <Route path="/deconnexion" element={<DeconnexionApp />} />
       </Routes>

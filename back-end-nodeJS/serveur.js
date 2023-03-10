@@ -77,6 +77,48 @@ app.get('/api/comptes', verifyToken, async (req, res) => {
   }
 });
 
+// Route pour récupérer un seul compte par son id
+app.get('/api/comptes/:id', verifyToken, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await axios.get(`http://localhost:8080/comptes/${id}`);
+    const compte = response.data;
+    res.json(compte);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la récupération du compte');
+  }
+});
+
+// Route pour mettre à jour un compte par son id
+app.put('/api/comptes/:id', verifyToken, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { nom, prenom, email,motdepasse, admin } = req.body;
+    const response = await axios.put(`http://localhost:8080/comptes/${id}`, { nom, prenom, email, motdepasse, admin });
+    const compte = response.data;
+    res.json(compte);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la mise à jour du compte');
+  }
+});
+
+// Route pour supprimer un compte par son id
+app.delete('/api/comptes/:id', verifyToken, async (req, res) => {
+  try {
+    const id = req.params.id;
+    await axios.delete(`http://localhost:8080/comptes/${id}`);
+    res.json({ message: `Compte ${id} supprimé` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la suppression du compte');
+  }
+});
+
+
+
+
 
 app.listen(8000, () => {
   console.log('Server started on port 8000');

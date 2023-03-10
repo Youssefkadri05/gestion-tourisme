@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const CompteList = () => {
   const [comptes, setComptes] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchComptes = async () => {
@@ -19,6 +21,25 @@ const CompteList = () => {
 
     fetchComptes();
   }, []);
+
+  const handleModifierClick = (id) => {
+    navigate(`/modifier-compte/${id}`);
+  };
+
+  const handleSupprimerClick = async (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce compte ?')) {
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`http://localhost:8000/api/comptes/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setComptes(comptes.filter((compte) => compte.id !== id));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
 
   return (
     <div className="container">
@@ -42,8 +63,11 @@ const CompteList = () => {
               <td>{compte.email}</td>
               <td>{compte.admin}</td>
               <td>
-                <button className="btn btn-primary">Modifier</button>
-                <button className="btn btn-danger">Supprimer</button>
+                <button className="btn btn-primary" onClick={() => handleModifierClick(compte.id)}>Modifier</button>
+                <button className="btn btn-danger" onClick={() => handleSupprimerClick(compte.id)}>
+                  Supprimer
+                </button>
+
               </td>
             </tr>
           ))}
