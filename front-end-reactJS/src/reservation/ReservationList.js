@@ -74,7 +74,7 @@ const ReservationList = () => {
                   <p className="card-text">Prix: {reservation.prix} €</p>
                   <p className="card-text">Date: {reservation.panier.date}</p>
                   <p className="card-text">Description: {reservation.sortie.description}</p>
-                  <button className="btn btn-primary" onClick={() => handleConfirmation(reservation.id)}>Confirmer</button>
+                  <button className="btn btn-primary" onClick={() => handleConfirmation(reservation.panier.id)}>Confirmer</button>
                 </div>
               </div>
             ))}

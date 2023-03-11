@@ -14,6 +14,7 @@ import SortieDetails from './sortie/SortieDetails';
 import AjouterSortie from './sortie/AjouterSortie';
 
 import ReservationList from './reservation/ReservationList';
+import UsrSortieDetails from './reservation/UsrSortieDetails';
 
 
 import jwt_decode from 'jwt-decode';
@@ -90,8 +91,10 @@ function App() {
 
         {/* Définition des routes pour la gestion des sorties */}
         <Route path="/sorties" element={<SortieListe />} />
-        <Route path="/modifier-sortie/:id" element={<ModifierCompte />} />
+        <Route path="/modifier-sorti/:id" element={<ModifierCompte />} />
         <Route path="/details/sortie/:id" element={<SortieDetails />} />
+        <Route path="/details/sortie/:id" element={<SortieDetails />} />
+        <Route path="/usr/details/sortie/:id" element={<UsrSortieDetails />} />
         <Route path="/ajouter-sortie" element={<AjouterSortie />} />
         
         {/* Définition des routes pour l'ahtentification */}

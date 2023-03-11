@@ -39,7 +39,6 @@ app.post('/api/login', (req, res) => {
 
 // Middleware pour vérifier le token
 function verifyToken(req, res, next) {
-  console.log(req.headers.authorization.split(' '));
   const token = req.headers.authorization.split(' ')[1];
 
   try {
@@ -226,6 +225,51 @@ app.put('/api/panier/:id', verifyToken, isUser, async (req, res) => {
     res.status(500).send('Erreur lors de la mise à jour du panier');
   }
 });
+
+// Route pour créer un panier
+app.post('/api/paniers', async (req, res) => {
+  try {
+    const { userId, sortie } = req.body;
+    const compteResponse = await axios.get(`http://localhost:8080/comptes/${userId}`);
+    const compte = compteResponse.data;
+    const panierData = {
+      date: new Date(),
+      prix: 50.11,
+      confirme: 0,
+      compte: compte
+    };
+    
+    await axios.post('http://localhost:8080/paniers', panierData);
+    
+
+    const panierResponse = await axios.get(`http://localhost:8080/paniers/last`);
+    const panierNewCree = panierResponse.data;
+
+
+    const responseForSortie = await axios.get(`http://localhost:8080/sorties/${sortie.sortie.id}`);
+    const sortieParam = { id: responseForSortie.data.id, description: responseForSortie.data.description };
+
+    const reservationData = {
+      prix: 50.11,
+      panier: panierNewCree,
+      sortie: sortieParam,
+      compte: compte
+    };
+    console.log("*******************************************************************");
+    console.log(sortie);
+
+    const responseForCreatReservation = await axios.post('http://localhost:8080/reservations', reservationData);
+    const ResReseve = responseForCreatReservation.data;
+   
+    res.json(ResReseve);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la création du panier');
+  }
+});
+
+
+
 
 
 
