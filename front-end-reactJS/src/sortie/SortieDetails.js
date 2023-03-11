@@ -37,7 +37,7 @@ const SortieDetails = () => {
       </div>
       <h2 className="mt-5">Options</h2>
       {sortie.options.map((option) => (
-        <div className="card my-3 card-colorr"  key={option.id}>
+        <div className="card my-3 card-colorr bg-secondary "  key={option.id}>
           <div className="card-body">
             <h5 className="card-title">Option {option.numero}</h5>
             <h6 className="card-subtitle mb-2 text-muted">{option.dateHeure}</h6>
