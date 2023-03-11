@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 
-
+//--------------------------------------------------------------- Connexion --------------------------------------------------
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   // Effectuer un appel HTTP à l'API pour récupérer les informations de compte
@@ -53,18 +53,7 @@ function verifyToken(req, res, next) {
   }
 }
 
-
-app.get('/api/protected', (req, res) => {
-  const token = req.headers.authorization.split(' ')[1];
-
-  try {
-    const decoded = jwt.verify(token, 'secret_key');
-    res.json({ message: `Welcome ${decoded.username}!` });
-  } catch (error) {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
-});
-
+//--------------------------------------------------------------------------Gestion des Compted --------------------------------------------
 // Route pour récupérer la liste des comptes
 app.get('/api/comptes', verifyToken, async (req, res) => {
   try {
@@ -87,6 +76,18 @@ app.get('/api/comptes/:id', verifyToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Erreur lors de la récupération du compte');
+  }
+});
+// Route pour ajouter un nouveau compte
+app.post('/api/comptes', verifyToken, async (req, res) => {
+  try {
+    const { nom, prenom, email, motdepasse, admin } = req.body;
+    const response = await axios.post('http://localhost:8080/comptes', { nom, prenom, email, motdepasse, admin });
+    const compte = response.data;
+    res.json(compte);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de l\'ajout du compte');
   }
 });
 
@@ -118,6 +119,65 @@ app.delete('/api/comptes/:id', verifyToken, async (req, res) => {
 
 
 
+//--------------------------------------------------------------------------Gestion des Sorties --------------------------------------------
+
+// Route pour récupérer la liste des sorties
+app.get('/api/sorties', verifyToken, async (req, res) => {
+  try {
+    const response = await axios.get('http://localhost:8080/sorties');
+    const sorties = response.data.map(({ id, description }) => ({ id, description }));
+    res.json(sorties);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la récupération des sorties');
+  }
+});
+
+
+// Route pour récupérer la sortie et ses options
+app.get('/api/sorties/:id', verifyToken, async (req, res) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/sorties/${req.params.id}`);
+    const sortie = { id: response.data.id, description: response.data.description };
+    const optionsResponse = await axios.get(`http://localhost:8080/sorties/${req.params.id}/options`);
+    const options = optionsResponse.data.map(({ id, dateHeure, lieu, description }) => ({
+      id,
+      dateHeure,
+      lieu,
+      description,
+    }));
+    const result = { sortie, options };
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la récupération des données de sortie et d\'options');
+  }
+});
+
+// Route pour ajouter une nouvelle sortie
+app.post('/api/sorties', verifyToken, async (req, res) => {
+  try {
+    const { description } = req.body;
+    const response = await axios.post('http://localhost:8080/sorties', {description });
+    const sortie = response.data;
+    res.json(sortie);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de l\'ajout de la sorties');
+  }
+});
+
+// Route pour supprimer une sortie par son id
+app.delete('/api/sorties/:id', verifyToken, async (req, res) => {
+  try {
+    const id = req.params.id;
+    await axios.delete(`http://localhost:8080/sorties/${id}`);
+    res.json({ message: `sortie ${id} supprimée` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la suppression de la sortie');
+  }
+});
 
 
 app.listen(8000, () => {

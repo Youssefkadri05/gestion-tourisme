@@ -8,6 +8,14 @@ import HomeAdmin from './admin/HomeAdmin';
 import DeconnexionApp from './deconnexion/DeconnexionApp';
 import CompteList from './compte/CompteListe';
 import ModifierCompte from './compte/ModifierCompte';
+import AjoutCompte from './compte/AjoutCompte';
+import SortieListe from './sortie/SortieListe';
+import SortieDetails from './sortie/SortieDetails';
+import AjouterSortie from './sortie/AjouterSortie';
+
+import ReservationList from './reservation/ReservationList';
+
+
 import jwt_decode from 'jwt-decode';
 
 function App() {
@@ -50,6 +58,12 @@ function App() {
                   <Link className="nav-link" to="/sorties">Sorties</Link >
                 </>
               }
+              {loggedIn && !isAdmin &&
+                <>
+                  <Link className="nav-link" to="/sorties">Sorties</Link >
+                  <Link className="nav-link" to="/mes-reservations">Mes réservations</Link >
+                </>
+              }
               {loggedIn &&
                 <Link className="nav-link" to="/deconnexion" onClick={handleLogout}>Déconnexion</Link >
               }
@@ -63,14 +77,29 @@ function App() {
       </nav>
 
       <Routes>
+        {/* Définition des routes pour le navbar */}
         <Route exact path="/" element={<HomeApp />} />
         <Route path="/About" element={<AboutApp />} />
         <Route path="/homeutilisateur" element={<HomeUtilisateur />} />
         <Route path="/admin" element={<HomeAdmin />} />
+
+        {/* Définition des routes pour la gestion des comptes */}
         <Route path="/comptes" element={<CompteList />} />
         <Route path="/modifier-compte/:id" element={<ModifierCompte />} />
+        <Route path="/ajouter-compte" element={<AjoutCompte />} />
+
+        {/* Définition des routes pour la gestion des sorties */}
+        <Route path="/sorties" element={<SortieListe />} />
+        <Route path="/modifier-sortie/:id" element={<ModifierCompte />} />
+        <Route path="/details/sortie/:id" element={<SortieDetails />} />
+        <Route path="/ajouter-sortie" element={<AjouterSortie />} />
+        
+        {/* Définition des routes pour l'ahtentification */}
         <Route path="/connexion" element={<ConnexionApp setLoggedIn={setLoggedIn} setIsAdmin={setIsAdmin} />} />
         <Route path="/deconnexion" element={<DeconnexionApp />} />
+
+        {/* Définition des routes pour la gestion des reservations */}
+        <Route path="/mes-reservations" element={<ReservationList  />} />
       </Routes>
 
     </Router>

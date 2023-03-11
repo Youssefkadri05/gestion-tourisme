@@ -39,11 +39,17 @@ const CompteList = () => {
       }
     }
   };
-  
+
+  const handleAjouterClick = () => {
+    navigate('/ajouter-compte');
+  };
 
   return (
     <div className="container">
       <h1>Liste des comptes</h1>
+      <button className="btn btn-success" onClick={handleAjouterClick}>
+        Ajouter compte
+      </button>
       <table className="table">
         <thead>
           <tr>
