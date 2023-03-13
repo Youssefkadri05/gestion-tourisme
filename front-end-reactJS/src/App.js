@@ -16,6 +16,9 @@ import AjouterSortie from './sortie/AjouterSortie';
 import ReservationList from './reservation/ReservationList';
 import UsrSortieDetails from './reservation/UsrSortieDetails';
 
+import AjoutCommentaire from './commentaire/AjoutCommentaire';
+
+
 
 import jwt_decode from 'jwt-decode';
 
@@ -103,6 +106,10 @@ function App() {
 
         {/* Définition des routes pour la gestion des reservations */}
         <Route path="/mes-reservations" element={<ReservationList  />} />
+
+        {/* Définition des routes pour la gestion des commentaires */}
+        <Route path="/ajouter-commentaire/:idUser/:idSortie" element={<AjoutCommentaire />} />
+        
       </Routes>
 
     </Router>

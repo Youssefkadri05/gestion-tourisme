@@ -269,7 +269,19 @@ app.post('/api/paniers', async (req, res) => {
 });
 
 
-
+//--------------------------------------------------------------------------Gestion des Commentaire --------------------------------------------
+// Route pour récupérer la liste des comptes
+app.get('/api/commentaires', verifyToken, isUser, async (req, res) => {
+  try {
+    
+  
+    
+    res.json(comptes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur lors de la récupération des comptes');
+  }
+});
 
 
 

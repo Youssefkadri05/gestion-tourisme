@@ -35,28 +35,23 @@ const SortieDetails = () => {
       setSelectedOptions(newOptions);
     }
   };
+  // Récupérer le statut admin à partir du token stocké localement
+  const token = localStorage.getItem('token');
+  const decodedToken = jwt_decode(token);
+  const userId = decodedToken.id;
+  
+  const handleAjouterCommentairelick = (userId,idSortie) => {
+    navigate(`/ajouter-commentaire/${userId}/${idSortie}`);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (selectedOptions.length > 0) {
       try {
-
-
-
-         // Récupérer le statut admin à partir du token stocké localement
-  const token = localStorage.getItem('token');
-  const decodedToken = jwt_decode(token);
-  
-        const userId = decodedToken.id;
-        
-
-
-
-
         
         await axios.post(
           `http://localhost:8000/api/paniers`,
-          { selectedOptions, userId , sortie},
+          { selectedOptions, userId, sortie },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -67,6 +62,26 @@ const SortieDetails = () => {
       }
     }
   };
+  const [comments] = useState([
+    {
+      id: 1,
+      user: 'John',
+      image: 'https://via.placeholder.com/150',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    },
+    {
+      id: 2,
+      user: 'Jane',
+      image: 'https://via.placeholder.com/150',
+      text: 'Praesent ut massa quis augue luctus elementum.',
+    },
+    {
+      id: 3,
+      user: 'Bob',
+      image: 'https://via.placeholder.com/150',
+      text: 'Vestibulum eu justo lectus. Mauris euismod nulla eget elit consequat auctor.',
+    },
+  ]);
 
   if (!sortie) {
     return <div className="container mt-5">Loading...</div>;
@@ -109,6 +124,25 @@ const SortieDetails = () => {
           Ajouter au panier
         </button>
       </form>
+
+      <h2 className="mt-5">Commentaires</h2>
+      <div className="card my-3">
+        <div className="card-body">
+          {comments.map(comment => (
+            <div className="d-flex align-items-center mb-3" key={comment.id}>
+              <img src={comment.image} alt={comment.user} className="mr-3" />
+              <div>
+                <h5>{comment.user}</h5>
+                <p>{comment.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <button className="btn btn-success mt-5" onClick={() => handleAjouterCommentairelick(userId,sortie.sortie.id)}>
+        Ajouter un commentaire
+      </button>
+
     </div>
   );
 };
